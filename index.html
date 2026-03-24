@@ -1,275 +1,72 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AUL Research Formatter v3.0</title>
+  <script type="module" crossorigin>(function(){let e=document.createElement(`link`).relList;if(e&&e.supports&&e.supports(`modulepreload`))return;for(let e of document.querySelectorAll(`link[rel="modulepreload"]`))n(e);new MutationObserver(e=>{for(let t of e)if(t.type===`childList`)for(let e of t.addedNodes)e.tagName===`LINK`&&e.rel===`modulepreload`&&n(e)}).observe(document,{childList:!0,subtree:!0});function t(e){let t={};return e.integrity&&(t.integrity=e.integrity),e.referrerPolicy&&(t.referrerPolicy=e.referrerPolicy),e.crossOrigin===`use-credentials`?t.credentials=`include`:e.crossOrigin===`anonymous`?t.credentials=`omit`:t.credentials=`same-origin`,t}function n(e){if(e.ep)return;e.ep=!0;let n=t(e);fetch(e.href,n)}})();function e(e){let t=e,n=e.replace(/([。！？…])\s*(?=[^\s\n])/g,(e,t,n,r)=>{let i=r.slice(Math.max(0,n-10),n);return/[（(]/.test(i)&&!/[）)]/.test(i)?e:t+`
+`});return n=n.replace(/([。！？…]?\s*)((?:第[一二三四五六七八九十\d]+[章節部]|#+\s|■|◆|▶|【))/g,(e,t,n)=>t+`
+`+n),n=n.replace(/([。！？」』）])\s*([\u3040-\u9FFF\u4E00-\u9FFF]{3,20}[：:])/g,(e,t,n)=>t+`
+`+n),n=n.replace(/\n{3,}/g,`
+
+`),{text:n,count:n.split(`
+`).length-t.split(`
+`).length}}var t=[[`指標名`,`数値`,`現状`,`備考`,`出典`],[`指標`,`数値`,`出典`],[`指標名`,`数値`,`出典`],[`項目`,`数値`,`備考`],[`項目`,`内容`],[`年度`,`数値`],[`分類`,`割合`],[`業種`,`不足感`],[`年齢`,`割合`],[`区分`,`人数`]];function n(e){for(let n of t)if(n.filter(t=>e.includes(t)).length>=2)return n.filter(t=>e.includes(t));return null}function r(e,t){let n=[],r=e.split(/(?<=[%％万人億件回年度]|[0-9])\s*(?=[^\d%％万人億件回、。\s])/),i=[];for(let e of r){let r=e.trim();r&&(i.push(r),i.length>=t&&(n.push(i),i=[]))}return i.length>0&&n.push(i),n}function i(e){let t=e.split(`
+`),i=[],a=0;for(let e of t){if(e.length<40||e.includes(`|`)){i.push(e);continue}let t=n(e);if(!t){i.push(e);continue}let o=e;for(let e of t)o=o.replaceAll(e,`\0`);if(o=o.replace(/^\x00+/,``).replace(/\x00/g,` `).trim(),!o){i.push(e);continue}let s=r(o,t.length);if(s.length<1){i.push(e);continue}i.push(`| `+t.join(` | `)+` |`),i.push(`| `+t.map(()=>`---`).join(` | `)+` |`);for(let e of s){for(;e.length<t.length;)e.push(``);i.push(`| `+e.slice(0,t.length).join(` | `)+` |`)}a++}return{text:i.join(`
+`),count:a}}function a(e){let t={};for(let n of e)t[n]=(t[n]??0)+1;return Number(Object.entries(t).sort((e,t)=>t[1]-e[1])[0]?.[0]??1)}function o(e){return e.split(/\s{2,}|\t+/).map(e=>e.trim()).filter(Boolean)}function s(e){let t=e.split(`
+`),n=[],r=0,i=0;for(;i<t.length;){let e=t[i];if(o(e).length>=3&&!/[。、，,]/.test(e)){let s=[e],c=i+1;for(;c<t.length&&o(t[c]).length>=2&&!/[。、，,]/.test(t[c]);)s.push(t[c]),c++;if(s.length>=2){let e=a(s.map(e=>o(e).length)),t=o(s[0]),l=[];l.push(`| `+t.join(` | `)+` |`),l.push(`| `+t.map(()=>`---`).join(` | `)+` |`);for(let t of s.slice(1)){let n=o(t);for(;n.length<e;)n.push(``);l.push(`| `+n.slice(0,e).join(` | `)+` |`)}n.push(...l),r++,i=c;continue}}n.push(e),i++}return{text:n.join(`
+`),count:r}}function c(t){let n=e(t),r=i(n.text),a=s(r.text);return{text:a.text,stats:{restoredLineBreaks:n.count,extractedInlineTables:r.count+a.count}}}var l=[{re:/^(#{1})\s+(.+)$/,lv:1,clean:e=>e.replace(/^#+\s*/,``)},{re:/^(#{2})\s+(.+)$/,lv:2,clean:e=>e.replace(/^#+\s*/,``)},{re:/^(#{3})\s+(.+)$/,lv:3,clean:e=>e.replace(/^#+\s*/,``)},{re:/^[■◆]\s*(.+)$/,lv:2,clean:e=>e.replace(/^[■◆]\s*/,``)},{re:/^[▶●★◎▼▲]\s*(.+)$/,lv:3,clean:e=>e.replace(/^[▶●★◎▼▲]\s*/,``)},{re:/^【(.+)】$/,lv:2,clean:e=>e.replace(/^【|】$/g,``)},{re:/^第[一二三四五六七八九十\d]+[章節部].*/,lv:2},{re:/^\d+[\.\．]\s*[\u3040-\u9FFF].{2,}$/,lv:3}],u=/^([\u3040-\u9FFF\u4E00-\u9FFF]{4,})[：:](.{4,})$/;function d(e,t,n){let r=e.trim();for(let e of l)if(e.re.test(r)){let t=e.clean?e.clean(r):r;return{t:`h`,lv:e.lv,tx:t}}return r.match(u)&&r.length<=60&&!/。/.test(r)?{t:`h`,lv:2,tx:r}:r.length<=35&&t&&n&&/[\u3040-\u9FFF\u4E00-\u9FFF]/.test(r)&&!/[。、，,\.。…]/.test(r)?{t:`h`,lv:3,tx:r}:null}var f=/^[\-\*•◦▸]\s+(.+)$|^・(.+)$/,p=/^\d+[\.）\)]\s+(.+)$/;function m(e){let t=e.trim();return f.test(t)||p.test(t)}function h(e){let t=e.trim(),n=t.match(/^[\-\*•◦▸]\s+(.+)$/)??t.match(/^・(.+)$/);if(n)return n[1];let r=t.match(p);return r?r[1]:t}function g(e){return e.trim().startsWith(`|`)&&e.trim().endsWith(`|`)}function _(e){return e.trim().slice(1,-1).split(`|`).map(e=>e.trim())}function v(e){return e.every(e=>/^[-:]+$/.test(e))}function y(e){let{text:t}=c(e),n=t.split(`
+`),r=[],i=0;for(;i<n.length;){let e=n[i].trim();if(!e){i++;continue}if(/^[-*_]{3,}$/.test(e)){r.push({t:`hr`}),i++;continue}if(g(e)){let t=[e],a=i+1;for(;a<n.length&&g(n[a].trim());)t.push(n[a].trim()),a++;if(t.length>=2){let e={t:`table`,headers:_(t[0]),rows:t.slice(1).filter(e=>!v(_(e))).map(_)};r.push(e),i=a;continue}}if(m(e)){let t=[h(e)],a=i+1;for(;a<n.length&&m(n[a]);)t.push(h(n[a])),a++;let o={t:`list`,items:t};r.push(o),i=a;continue}let t=d(e,i===0||!n[i-1].trim(),i+1>=n.length||!n[i+1].trim());if(t){r.push(t),i++;continue}let a=[e],o=i+1;for(;o<n.length&&n[o].trim()&&!m(n[o])&&!g(n[o].trim())&&!/^[-*_]{3,}$/.test(n[o].trim());){let e=n[o].trim();if(d(e,!n[o-1]?.trim(),!n[o+1]?.trim()))break;a.push(e),o++}r.push({t:`p`,tx:a.join(`
+`)}),i=o}return{blocks:r,stats:{headings:r.filter(e=>e.t===`h`).length,paragraphs:r.filter(e=>e.t===`p`).length,lists:r.filter(e=>e.t===`list`).length,tables:r.filter(e=>e.t===`table`).length}}}function b(e){return e.replace(/&/g,`&amp;`).replace(/</g,`&lt;`).replace(/>/g,`&gt;`).replace(/"/g,`&quot;`)}function x(e){return[`| `+e.headers.join(` | `)+` |`,`| `+e.headers.map(()=>`---`).join(` | `)+` |`,...e.rows.map(e=>`| `+e.join(` | `)+` |`)].join(`
+`)}function S(e){return e.items.map(e=>`- ${e}`).join(`
+`)}function C(e){return e.map(e=>{switch(e.t){case`h`:return`#`.repeat(e.lv)+` `+e.tx;case`p`:return e.tx;case`list`:return S(e);case`table`:return x(e);case`hr`:return`---`}}).join(`
+
+`)}function w(e){return`<table>\n${`<thead><tr>`+e.headers.map(e=>`<th>${b(e)}</th>`).join(``)+`</tr></thead>`}\n${`<tbody>`+e.rows.map(e=>`<tr>`+e.map(e=>`<td>${b(e)}</td>`).join(``)+`</tr>`).join(``)+`</tbody>`}\n</table>`}function T(e){return`<!DOCTYPE html>
+<html lang="ja">
+<head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AUL Research Formatter</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-:root {
-  --bg:      #0f0f0f;
-  --bg2:     #1a1a1a;
-  --bg3:     #242424;
-  --border:  #2e2e2e;
-  --border2: #3a3a3a;
-  --text:    #e8e6e0;
-  --text2:   #9a9790;
-  --text3:   #5a5856;
-  --accent:  #c8f04a;
-  --accent2: #8fab2e;
-  --c-md:    #4fc3f7;
-  --c-html:  #f48c4e;
-  --c-note:  #b39ddb;
-  --c-gdoc:  #6ec97e;
-  --font:    "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans CJK JP", "Yu Gothic", sans-serif;
-  --mono:    "Menlo", "Consolas", "Courier New", monospace;
-  --r:       8px;
-}
-
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--font);
-  font-size: 14px;
-  line-height: 1.6;
-  min-height: 100vh;
-}
-
-/* ── Header ── */
-.header {
-  padding: 20px 28px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: baseline;
-  gap: 14px;
-  flex-wrap: wrap;
-}
-.header-title { font-size: 17px; font-weight: 700; }
-.header-sub   { font-size: 12px; color: var(--text3); font-family: var(--mono); }
-.header-badge {
-  margin-left: auto;
-  font-size: 10px;
-  font-family: var(--mono);
-  color: var(--accent2);
-  background: var(--bg3);
-  border: 1px solid var(--border2);
-  padding: 2px 8px;
-  border-radius: 4px;
-  letter-spacing: .06em;
-}
-
-/* ── Layout ── */
-.main {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  height: calc(100vh - 65px);
-}
-.pane { display: flex; flex-direction: column; overflow: hidden; }
-.pane-left { border-right: 1px solid var(--border); }
-
-/* ── Pane headers ── */
-.pane-header {
-  padding: 10px 18px;
-  border-bottom: 1px solid var(--border);
-  background: var(--bg2);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-shrink: 0;
-}
-.pane-label {
-  font-size: 10px;
-  font-family: var(--mono);
-  font-weight: 500;
-  color: var(--text3);
-  letter-spacing: .1em;
-  text-transform: uppercase;
-}
-.char-count { margin-left: auto; font-size: 11px; font-family: var(--mono); color: var(--text3); }
-
-/* ── Textarea ── */
-textarea {
-  flex: 1;
-  width: 100%;
-  padding: 18px;
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--font);
-  font-size: 13px;
-  line-height: 1.8;
-  border: none;
-  outline: none;
-  resize: none;
-}
-textarea::placeholder { color: var(--text3); }
-#outputRaw { font-family: var(--mono); font-size: 12px; }
-
-/* ── Controls ── */
-.controls {
-  padding: 10px 18px;
-  border-top: 1px solid var(--border);
-  background: var(--bg2);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-shrink: 0;
-  flex-wrap: wrap;
-}
-.ctrl-label { font-size: 10px; color: var(--text3); font-family: var(--mono); margin-right: 2px; }
-
-.fmt-btn {
-  padding: 4px 13px;
-  border-radius: 20px;
-  border: 1px solid var(--border2);
-  background: transparent;
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all .15s;
-  letter-spacing: .03em;
-}
-.fmt-btn[data-f="md"]   { color: var(--c-md);   }
-.fmt-btn[data-f="html"] { color: var(--c-html);  }
-.fmt-btn[data-f="note"] { color: var(--c-note);  }
-.fmt-btn[data-f="gdoc"] { color: var(--c-gdoc);  }
-.fmt-btn.on[data-f="md"]   { background: var(--c-md);   color: #0f0f0f; border-color: var(--c-md);   }
-.fmt-btn.on[data-f="html"] { background: var(--c-html); color: #0f0f0f; border-color: var(--c-html); }
-.fmt-btn.on[data-f="note"] { background: var(--c-note); color: #0f0f0f; border-color: var(--c-note); }
-.fmt-btn.on[data-f="gdoc"] { background: var(--c-gdoc); color: #0f0f0f; border-color: var(--c-gdoc); }
-
-.run-btn {
-  margin-left: auto;
-  padding: 7px 22px;
-  background: var(--accent);
-  color: #0f0f0f;
-  border: none;
-  border-radius: var(--r);
-  font-family: var(--mono);
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  letter-spacing: .04em;
-  transition: opacity .15s;
-}
-.run-btn:hover:not(:disabled) { opacity: .82; }
-.run-btn:disabled { opacity: .3; cursor: not-allowed; }
-
-/* ── Output header ── */
-.out-header {
-  padding: 10px 18px;
-  border-bottom: 1px solid var(--border);
-  background: var(--bg2);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-shrink: 0;
-  flex-wrap: wrap;
-}
-.fmt-badge {
-  font-size: 10px;
-  font-family: var(--mono);
-  font-weight: 500;
-  padding: 2px 8px;
-  border-radius: 4px;
-  background: var(--bg3);
-  border: 1px solid;
-  letter-spacing: .06em;
-}
-.fmt-badge[data-f="md"]   { color: var(--c-md);   border-color: var(--c-md);   }
-.fmt-badge[data-f="html"] { color: var(--c-html); border-color: var(--c-html); }
-.fmt-badge[data-f="note"] { color: var(--c-note); border-color: var(--c-note); }
-.fmt-badge[data-f="gdoc"] { color: var(--c-gdoc); border-color: var(--c-gdoc); }
-
-.view-toggle {
-  display: flex;
-  border: 1px solid var(--border2);
-  border-radius: 6px;
-  overflow: hidden;
-}
-.vt {
-  padding: 3px 10px;
-  background: transparent;
-  color: var(--text3);
-  border: none;
-  font-family: var(--mono);
-  font-size: 10px;
-  cursor: pointer;
-  transition: all .15s;
-  letter-spacing: .06em;
-}
-.vt:first-child { border-right: 1px solid var(--border2); }
-.vt.on { background: var(--bg3); color: var(--text); }
-
-.act-btns { margin-left: auto; display: flex; gap: 5px; }
-.act-btn {
-  padding: 4px 11px;
-  border: 1px solid var(--border2);
-  background: transparent;
-  color: var(--text2);
-  border-radius: 5px;
-  font-size: 11px;
-  font-family: var(--mono);
-  cursor: pointer;
-  transition: all .15s;
-}
-.act-btn:hover { border-color: var(--text2); color: var(--text); }
-.act-btn.ok { color: var(--accent); border-color: var(--accent); }
-
-/* ── Preview ── */
-.preview {
-  flex: 1;
-  overflow-y: auto;
-  padding: 18px 20px;
-  display: none;
-}
-.preview h1 { font-size: 20px; font-weight: 700; color: var(--text); margin: 0 0 14px; border-bottom: 1px solid var(--border2); padding-bottom: 8px; }
-.preview h2 { font-size: 16px; font-weight: 700; color: var(--text); margin: 22px 0 8px; border-left: 3px solid var(--accent2); padding-left: 10px; }
-.preview h3 { font-size: 14px; font-weight: 500; color: var(--text); margin: 16px 0 6px; }
-.preview p  { color: var(--text2); margin: 0 0 10px; font-size: 13px; line-height: 1.8; }
-.preview ul, .preview ol { padding-left: 20px; margin: 0 0 10px; color: var(--text2); font-size: 13px; }
-.preview li { margin: 3px 0; }
-.preview table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 12px; }
-.preview th { background: var(--bg3); color: var(--text); padding: 6px 10px; text-align: left; border: 1px solid var(--border2); }
-.preview td { color: var(--text2); padding: 5px 10px; border: 1px solid var(--border); }
-.preview hr { border: none; border-top: 1px solid var(--border2); margin: 16px 0; }
-
-/* ── Stats bar ── */
-.stats {
-  padding: 7px 18px;
-  border-top: 1px solid var(--border);
-  background: var(--bg2);
-  display: none;
-  gap: 18px;
-  flex-shrink: 0;
-}
-.stat { display: flex; gap: 5px; font-size: 11px; font-family: var(--mono); }
-.stat-l { color: var(--text3); }
-.stat-v { color: var(--text2); }
-
-/* ── Scrollbar ── */
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
-
-@media (max-width: 680px) {
-  .main { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; height: auto; }
-  .pane-left { border-right: none; border-bottom: 1px solid var(--border); height: 50vh; }
-  .pane { height: 50vh; }
-}
+  body { font-family: sans-serif; max-width: 800px; margin: 2rem auto; line-height: 1.7; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { border: 1px solid #ccc; padding: 6px 10px; text-align: left; }
+  th { background: #f5f5f5; }
+  h1, h2, h3 { margin-top: 1.6em; }
 </style>
 </head>
 <body>
+${e.map(e=>{switch(e.t){case`h`:return`<h${e.lv}>${b(e.tx)}</h${e.lv}>`;case`p`:return`<p>${b(e.tx).replace(/\n/g,`<br>`)}</p>`;case`list`:return`<ul>
+`+e.items.map(e=>`  <li>${b(e)}</li>`).join(`
+`)+`
+</ul>`;case`table`:return w(e);case`hr`:return`<hr>`}}).join(`
 
+`)}
+</body>
+</html>`}function E(e){return e.map(e=>{switch(e.t){case`h`:return e.lv===1?`# ${e.tx}`:e.lv===2?`## ${e.tx}`:`### ${e.tx}`;case`p`:return e.tx;case`list`:return e.items.map(e=>`・${e}`).join(`
+`);case`table`:return[e.headers,...e.rows].map(e=>e.join(`　|　`)).join(`
+`);case`hr`:return`──────────────────────`}}).join(`
+
+`)}function D(e){return e.map(e=>{switch(e.t){case`h`:return e.lv===1?`■ ${e.tx}\n${`═`.repeat(40)}`:e.lv===2?`▶ ${e.tx}\n${`─`.repeat(30)}`:`◆ ${e.tx}`;case`p`:return e.tx;case`list`:return e.items.map(e=>`  • ${e}`).join(`
+`);case`table`:return x(e);case`hr`:return`━`.repeat(40)}}).join(`
+
+`)}function O(e,t){switch(t){case`markdown`:return C(e);case`html`:return T(e);case`note`:return E(e);case`gdoc`:return D(e)}}var k={md:`markdown`,html:`html`,note:`note`,gdoc:`gdoc`},A={md:`MD`,html:`HTML`,note:`NOTE`,gdoc:`GDOC`},j={md:`md`,html:`html`,note:`md`,gdoc:`md`},M=`md`,N=`raw`,P=``,F=document.getElementById(`inp`),I=document.getElementById(`outputRaw`),L=document.getElementById(`prev`),R=document.getElementById(`runBtn`),z=document.getElementById(`cpBtn`),B=document.getElementById(`dlBtn`),V=document.getElementById(`clrBtn`),H=document.getElementById(`cc`),U=document.getElementById(`stats`),W=document.getElementById(`badge`),G=document.getElementById(`vtR`),K=document.getElementById(`vtP`);document.querySelectorAll(`.fmt-btn`).forEach(e=>{e.addEventListener(`click`,()=>{M=e.dataset.f,document.querySelectorAll(`.fmt-btn`).forEach(e=>e.classList.remove(`on`)),e.classList.add(`on`),W.dataset.f=M,W.textContent=A[M],B.classList.toggle(`ok`,M===`html`),P&&(P=O(y(F.value).blocks,k[M]),I.value=P,N===`prev`&&Y())})});function q(e){N=e,G.classList.toggle(`on`,e===`raw`),K.classList.toggle(`on`,e===`prev`),I.style.display=e===`raw`?`flex`:`none`,L.style.display=e===`prev`?`block`:`none`,e===`prev`&&P&&Y()}G.addEventListener(`click`,()=>q(`raw`)),K.addEventListener(`click`,()=>q(`prev`));function J(e){return e.replace(/^# (.+)$/gm,`<h1>$1</h1>`).replace(/^## (.+)$/gm,`<h2>$1</h2>`).replace(/^### (.+)$/gm,`<h3>$1</h3>`).replace(/^---+$/gm,`<hr>`).replace(/\*\*(.+?)\*\*/g,`<strong>$1</strong>`).replace(/^- (.+)$/gm,`<li>$1</li>`).replace(/^\d+\. (.+)$/gm,`<li>$1</li>`).replace(/(<li>.*<\/li>\n?)+/g,e=>`<ul>`+e+`</ul>`).replace(/((?:^\|.+\|\n?)+)/gm,e=>{let t=e.trim().split(`
+`).filter(e=>!/^\|[-: |]+\|$/.test(e));if(t.length<1)return e;let n=e=>e.slice(1,-1).split(`|`).map(e=>e.trim()),[r,...i]=t;return`<table><thead><tr>${n(r).map(e=>`<th>${e}</th>`).join(``)}</tr></thead><tbody>${i.map(e=>`<tr>`+n(e).map(e=>`<td>${e}</td>`).join(``)+`</tr>`).join(``)}</tbody></table>`}).replace(/\n\n/g,`</p><p>`).replace(/^([^<\n][^\n]+)$/gm,`<p>$1</p>`)}function Y(){M===`html`?L.innerHTML=`
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:16px;color:var(--text3);font-family:var(--mono);font-size:12px;">
+        <div style="font-size:32px;">📄</div>
+        <div style="color:var(--text2);">HTMLはファイルとして開いてください</div>
+        <div style="font-size:11px;">DL → ブラウザにドラッグ&ドロップ</div>
+      </div>`:L.innerHTML=J(P)}F.addEventListener(`input`,()=>{let e=F.value.length;H.textContent=e.toLocaleString(`ja-JP`)+` 文字`,R.disabled=e===0}),R.addEventListener(`click`,()=>{let{blocks:e,stats:t}=y(F.value);P=O(e,k[M]),I.value=P;let n=document.getElementById(`sH`),r=document.getElementById(`sP`),i=document.getElementById(`sL`),a=document.getElementById(`sT`);n.textContent=String(t.headings),r.textContent=String(t.paragraphs),i.textContent=String(t.lists),a.textContent=String(t.tables),U.style.display=`flex`,N===`prev`&&Y()}),z.addEventListener(`click`,async()=>{if(P){try{await navigator.clipboard.writeText(P)}catch{let e=document.createElement(`textarea`);e.value=P,document.body.appendChild(e),e.select(),document.execCommand(`copy`),document.body.removeChild(e)}z.textContent=`コピー済`,z.classList.add(`ok`),setTimeout(()=>{z.textContent=`コピー`,z.classList.remove(`ok`)},1800)}}),B.addEventListener(`click`,()=>{if(!P)return;let e=new Blob([P],{type:`text/plain;charset=utf-8`}),t=document.createElement(`a`);t.href=URL.createObjectURL(e),t.download=`formatted.`+j[M],document.body.appendChild(t),t.click(),document.body.removeChild(t)}),V.addEventListener(`click`,()=>{F.value=``,I.value=``,L.innerHTML=``,P=``,H.textContent=`0 文字`,U.style.display=`none`,R.disabled=!0}),q(`prev`);</script>
+  <style rel="stylesheet" crossorigin>*,:before,:after{box-sizing:border-box;margin:0;padding:0}:root{--bg:#0f0f0f;--bg2:#1a1a1a;--bg3:#242424;--border:#2e2e2e;--border2:#3a3a3a;--text:#e8e6e0;--text2:#9a9790;--text3:#5a5856;--accent:#c8f04a;--accent2:#8fab2e;--c-md:#4fc3f7;--c-html:#f48c4e;--c-note:#b39ddb;--c-gdoc:#6ec97e;--font:"Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans CJK JP", "Yu Gothic", sans-serif;--mono:"Menlo", "Consolas", "Courier New", monospace;--r:8px}body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;font-size:14px;line-height:1.6}.header{border-bottom:1px solid var(--border);flex-wrap:wrap;align-items:baseline;gap:14px;padding:20px 28px;display:flex}.header-title{font-size:17px;font-weight:700}.header-sub{color:var(--text3);font-size:12px;font-family:var(--mono)}.header-badge{font-size:10px;font-family:var(--mono);color:var(--accent2);background:var(--bg3);border:1px solid var(--border2);letter-spacing:.06em;border-radius:4px;margin-left:auto;padding:2px 8px}.main{grid-template-columns:1fr 1fr;height:calc(100vh - 65px);display:grid}.pane{flex-direction:column;display:flex;overflow:hidden}.pane-left{border-right:1px solid var(--border)}.pane-header{border-bottom:1px solid var(--border);background:var(--bg2);flex-shrink:0;align-items:center;gap:10px;padding:10px 18px;display:flex}.pane-label{font-size:10px;font-family:var(--mono);color:var(--text3);letter-spacing:.1em;text-transform:uppercase;font-weight:500}.char-count{font-size:11px;font-family:var(--mono);color:var(--text3);margin-left:auto}textarea{background:var(--bg);width:100%;color:var(--text);font-family:var(--font);resize:none;border:none;outline:none;flex:1;padding:18px;font-size:13px;line-height:1.8}textarea::placeholder{color:var(--text3)}#outputRaw{font-family:var(--mono);font-size:12px;display:none}.controls{border-top:1px solid var(--border);background:var(--bg2);flex-wrap:wrap;flex-shrink:0;align-items:center;gap:6px;padding:10px 18px;display:flex}.ctrl-label{color:var(--text3);font-size:10px;font-family:var(--mono);margin-right:2px}.fmt-btn{border:1px solid var(--border2);font-family:var(--mono);cursor:pointer;letter-spacing:.03em;background:0 0;border-radius:20px;padding:4px 13px;font-size:11px;font-weight:500;transition:all .15s}.fmt-btn[data-f=md]{color:var(--c-md)}.fmt-btn[data-f=html]{color:var(--c-html)}.fmt-btn[data-f=note]{color:var(--c-note)}.fmt-btn[data-f=gdoc]{color:var(--c-gdoc)}.fmt-btn.on[data-f=md]{background:var(--c-md);color:#0f0f0f;border-color:var(--c-md)}.fmt-btn.on[data-f=html]{background:var(--c-html);color:#0f0f0f;border-color:var(--c-html)}.fmt-btn.on[data-f=note]{background:var(--c-note);color:#0f0f0f;border-color:var(--c-note)}.fmt-btn.on[data-f=gdoc]{background:var(--c-gdoc);color:#0f0f0f;border-color:var(--c-gdoc)}.run-btn{background:var(--accent);color:#0f0f0f;border-radius:var(--r);font-family:var(--mono);cursor:pointer;letter-spacing:.04em;border:none;margin-left:auto;padding:7px 22px;font-size:12px;font-weight:600;transition:opacity .15s}.run-btn:hover:not(:disabled){opacity:.82}.run-btn:disabled{opacity:.3;cursor:not-allowed}.out-header{border-bottom:1px solid var(--border);background:var(--bg2);flex-wrap:wrap;flex-shrink:0;align-items:center;gap:8px;padding:10px 18px;display:flex}.fmt-badge{font-size:10px;font-family:var(--mono);background:var(--bg3);letter-spacing:.06em;border:1px solid;border-radius:4px;padding:2px 8px;font-weight:500}.fmt-badge[data-f=md]{color:var(--c-md);border-color:var(--c-md)}.fmt-badge[data-f=html]{color:var(--c-html);border-color:var(--c-html)}.fmt-badge[data-f=note]{color:var(--c-note);border-color:var(--c-note)}.fmt-badge[data-f=gdoc]{color:var(--c-gdoc);border-color:var(--c-gdoc)}.view-toggle{border:1px solid var(--border2);border-radius:6px;display:flex;overflow:hidden}.vt{color:var(--text3);font-family:var(--mono);cursor:pointer;letter-spacing:.06em;background:0 0;border:none;padding:3px 10px;font-size:10px;transition:all .15s}.vt:first-child{border-right:1px solid var(--border2)}.vt.on{background:var(--bg3);color:var(--text)}.act-btns{gap:5px;margin-left:auto;display:flex}.act-btn{border:1px solid var(--border2);color:var(--text2);font-size:11px;font-family:var(--mono);cursor:pointer;background:0 0;border-radius:5px;padding:4px 11px;transition:all .15s}.act-btn:hover{border-color:var(--text2);color:var(--text)}.act-btn.ok{color:var(--accent);border-color:var(--accent)}.preview{flex:1;padding:18px 20px;overflow-y:auto}.preview h1{color:var(--text);border-bottom:1px solid var(--border2);margin:0 0 14px;padding-bottom:8px;font-size:20px;font-weight:700}.preview h2{color:var(--text);border-left:3px solid var(--accent2);margin:22px 0 8px;padding-left:10px;font-size:16px;font-weight:700}.preview h3{color:var(--text);margin:16px 0 6px;font-size:14px;font-weight:500}.preview p{color:var(--text2);margin:0 0 10px;font-size:13px;line-height:1.8}.preview ul,.preview ol{color:var(--text2);margin:0 0 10px;padding-left:20px;font-size:13px}.preview li{margin:3px 0}.preview table{border-collapse:collapse;width:100%;margin:12px 0;font-size:12px}.preview th{background:var(--bg3);color:var(--text);text-align:left;border:1px solid var(--border2);padding:6px 10px}.preview td{color:var(--text2);border:1px solid var(--border);padding:5px 10px}.preview hr{border:none;border-top:1px solid var(--border2);margin:16px 0}.stats{border-top:1px solid var(--border);background:var(--bg2);flex-shrink:0;gap:18px;padding:7px 18px;display:none}.stat{font-size:11px;font-family:var(--mono);gap:5px;display:flex}.stat-l{color:var(--text3)}.stat-v{color:var(--text2)}::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:0 0}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}@media (width<=680px){.main{grid-template-rows:1fr 1fr;grid-template-columns:1fr;height:auto}.pane-left{border-right:none;border-bottom:1px solid var(--border);height:50vh}.pane{height:50vh}}
+/*$vite$:1*/</style>
+</head>
+<body>
 <header class="header">
   <span class="header-title">AUL Research Formatter</span>
   <span class="header-sub">非構造テキスト → 構造テキスト</span>
-  <span class="header-badge">v2.3 · rule-based · offline</span>
+  <span class="header-badge">v3.1 · TS · rule-based · offline</span>
 </header>
 
 <div class="main">
-
   <!-- 左：入力 -->
   <div class="pane pane-left">
     <div class="pane-header">
@@ -281,11 +78,11 @@ textarea::placeholder { color: var(--text3); }
 見出し・段落・表・箇条書きを自動検出して構造化します。"></textarea>
     <div class="controls">
       <span class="ctrl-label">出力形式：</span>
-      <button class="fmt-btn on" data-f="md"   onclick="setFmt('md')">Markdown</button>
-      <button class="fmt-btn"    data-f="html" onclick="setFmt('html')">HTML</button>
-      <button class="fmt-btn"    data-f="note" onclick="setFmt('note')">note</button>
-      <button class="fmt-btn"    data-f="gdoc" onclick="setFmt('gdoc')">Google Docs</button>
-      <button class="run-btn" id="runBtn" disabled onclick="run()">変換 →</button>
+      <button class="fmt-btn on" data-f="md">Markdown</button>
+      <button class="fmt-btn"    data-f="html">HTML</button>
+      <button class="fmt-btn"    data-f="note">note</button>
+      <button class="fmt-btn"    data-f="gdoc">Google Docs</button>
+      <button class="run-btn" id="runBtn" disabled>変換 →</button>
     </div>
   </div>
 
@@ -294,19 +91,17 @@ textarea::placeholder { color: var(--text3); }
     <div class="out-header">
       <span class="fmt-badge" id="badge" data-f="md">MD</span>
       <div class="view-toggle">
-        <button class="vt on" id="vtR" onclick="setView('raw')">RAW</button>
-        <button class="vt"    id="vtP" onclick="setView('prev')">PREVIEW</button>
+        <button class="vt on" id="vtR">RAW</button>
+        <button class="vt"    id="vtP">PREVIEW</button>
       </div>
       <div class="act-btns">
-        <button class="act-btn" id="cpBtn" onclick="doCopy()">コピー</button>
-        <button class="act-btn" onclick="doDL()">DL</button>
-        <button class="act-btn" onclick="doClear()">クリア</button>
+        <button class="act-btn" id="cpBtn">コピー</button>
+        <button class="act-btn" id="dlBtn">DL</button>
+        <button class="act-btn" id="clrBtn">クリア</button>
       </div>
     </div>
-
     <textarea id="outputRaw" readonly placeholder="変換結果がここに表示されます"></textarea>
     <div class="preview" id="prev"></div>
-
     <div class="stats" id="stats">
       <div class="stat"><span class="stat-l">見出し</span><span class="stat-v" id="sH">0</span></div>
       <div class="stat"><span class="stat-l">段落</span><span class="stat-v" id="sP">0</span></div>
@@ -316,630 +111,5 @@ textarea::placeholder { color: var(--text3); }
   </div>
 </div>
 
-<script>
-// ── state ──────────────────────────────────────────────────
-var fmt = 'md', view = 'raw', out = '';
-
-// ── input ──────────────────────────────────────────────────
-document.getElementById('inp').addEventListener('input', function() {
-  var n = this.value.length;
-  document.getElementById('cc').textContent = n.toLocaleString() + ' 文字';
-  document.getElementById('runBtn').disabled = (n === 0);
-});
-
-// ── format select ──────────────────────────────────────────
-function setFmt(f) {
-  fmt = f;
-  document.querySelectorAll('.fmt-btn').forEach(function(b) {
-    b.classList.toggle('on', b.dataset.f === f);
-  });
-  var labels = {md:'MD', html:'HTML', note:'NOTE', gdoc:'GDOC'};
-  var badge = document.getElementById('badge');
-  badge.textContent = labels[f];
-  badge.dataset.f = f;
-  if (out) run();
-}
-
-// ── view toggle ────────────────────────────────────────────
-function setView(v) {
-  view = v;
-  document.getElementById('vtR').classList.toggle('on', v === 'raw');
-  document.getElementById('vtP').classList.toggle('on', v === 'prev');
-  document.getElementById('outputRaw').style.display = v === 'raw' ? 'block' : 'none';
-  document.getElementById('prev').style.display = v === 'prev' ? 'block' : 'none';
-  if (v === 'prev' && out) showPreview();
-}
-
-// ── run ────────────────────────────────────────────────────
-function run() {
-  var raw = document.getElementById('inp').value.trim();
-  if (!raw) return;
-  var blocks = parse(raw);
-  out = render(blocks, fmt);
-  document.getElementById('outputRaw').value = out;
-
-  var h = blocks.filter(function(b){return b.t==='h';}).length;
-  var p = blocks.filter(function(b){return b.t==='p';}).length;
-  var l = blocks.filter(function(b){return b.t==='l';}).length;
-  var tb = blocks.filter(function(b){return b.t==='tb'||b.t==='kv';}).length;
-  document.getElementById('sH').textContent = h;
-  document.getElementById('sP').textContent = p;
-  document.getElementById('sL').textContent = l;
-  document.getElementById('sT').textContent = tb;
-  document.getElementById('stats').style.display = 'flex';
-
-  if (view === 'prev') showPreview();
-}
-
-// ══════════════════════════════════════════════════════════════
-// STEP 1: 改行復元
-// Geminiのコピペ出力は改行なしの1行テキスト。まず改行を復元する。
-// ══════════════════════════════════════════════════════════════
-function restoreLineBreaks(text) {
-  // 既に改行がある場合はそのまま
-  var lineCount = (text.match(/\n/g) || []).length;
-  var avgLen = text.length / (lineCount + 1);
-  if (lineCount > 5 && avgLen < 200) return text; // 既に改行あり
-
-  // 改行挿入ルール（優先度順）
-  var t = text;
-
-  // 1. 「。」の後に続くパターン別処理
-  //    「。次の文が短い見出し候補（30字以内）。」→ 改行
-  t = t.replace(/。([^\s。、]{1,30}(?:について|における|の実態|の概観|の分析|の視点|の必要性|への転換|の事例|の深層|の正体|という誤解|という側面|の不在))/g, '。\n$1');
-
-  // 2. 「。」の後に「第N」「N.」などの見出しパターン
-  t = t.replace(/。(第[一二三四五六七八九十\d]+[章節部])/g, '。\n$1');
-  t = t.replace(/([。」』])([\u4E00-\u9FFF]{2,15}[:：])/g, '$1\n$2');
-
-  // 3. 見出しっぽいパターンの前に改行
-  //    「本文終わり。見出し：」「本文終わり。【見出し】」
-  t = t.replace(/([。！？」』])(【[^】]{1,20}】)/g, '$1\n$2');
-
-  // 4. 表ヘッダーパターン検出
-  //    「〜である。指標名数値備考」→ 表の前で改行
-  //    連続する短い区切りなし単語（表ヘッダーらしさ）を検出
-  var TABLE_HEADERS = [
-    '指標名', '分類', '要因', '属性', '業種', '年齢階級', '項目', '区分', 
-    '種別', '地域', 'カテゴリ', '特徴', '施策', '課題'
-  ];
-  TABLE_HEADERS.forEach(function(h) {
-    // 本文の後に表ヘッダーが来るパターン
-    t = t.replace(new RegExp('([。」』])(' + h + ')'), '$1\n$2');
-  });
-
-  // 5. 数値パターンの連続（表データ）の前後
-  //    「〜万人備考〜万人」→ 改行
-  t = t.replace(/([0-9０-９]+(万人|万円|[%％]|倍|pt|歳))\s*([^\s、。0-9０-９]{1,10}(?:社会的|健康|障害|貧困|その他|社会|LGBT))/g, '$1\n$3');
-
-  // 6. 「。」の後に大文字カテゴリ開始（英大文字、IT等）
-  t = t.replace(/([。」』])(IT|DX|LGBT|AI|ICT)/g, '$1\n$2');
-
-  // 7. 長い段落を「。」で改行（200字超の塊）
-  var parts = t.split('\n');
-  var result = [];
-  parts.forEach(function(part) {
-    if (part.length > 200) {
-      // 。で文を分けて適度に改行を入れる
-      var sentences = part.split(/(?<=。)/);
-      var chunk = '';
-      sentences.forEach(function(s) {
-        chunk += s;
-        // 80〜150字ごとに段落区切り
-        if (chunk.length > 80 && /。$/.test(chunk)) {
-          result.push(chunk);
-          chunk = '';
-        }
-      });
-      if (chunk) result.push(chunk);
-    } else {
-      result.push(part);
-    }
-  });
-  return result.join('\n');
-}
-
-// ══════════════════════════════════════════════════════════════
-// STEP 2: 表ブロック検出
-// 改行復元後のテキストから表データ行を検出してパイプ表に変換
-// ══════════════════════════════════════════════════════════════
-
-// 表ヘッダー行候補かどうか判定
-// 「指標名数値・現状備考出典」のような連続する短い語句
-function detectInlineTable(text) {
-  // 改行なし表パターン: 「ヘッダー1ヘッダー2ヘッダー3行データ1値1備考1行データ2値2備考2」
-  // 既知ヘッダー名から表ブロックを抽出
-  var TABLE_PATTERNS = [
-    // 指標表パターン
-    {
-      header: /^(指標名|指標)\s*(数値[・\s]*現状|数値|値)\s*(備考)\s*(出典)?/,
-      rowPattern: /^(.{2,20})\s+([\d,，万千億%％倍\.pt\+\-]+[^\s]*)\s+(.{0,30})/
-    },
-    // 分類表パターン  
-    {
-      header: /^(分類|要因[・\s]*属性|カテゴリ)\s*(推計人数|人数|数)\s*(備考)/,
-      rowPattern: /^(.{2,20})\s+(約?[\d,，万千億]+人?)\s*(.*)/
-    },
-    // 年齢階級表パターン
-    {
-      header: /^年齢階級\s*女性労働力率/,
-      rowPattern: /^(\d{2}-\d{2}歳)\s+([\d\.]+%)\s+([\d\.]+%)\s*(\+[\d\.]+pt)?/
-    },
-    // 業種表パターン
-    {
-      header: /^業種\s*(不足感|状況)/,
-      rowPattern: /^(.{2,10})\s+(極めて高い|高止まり|慢性的に不足|[^\s]{2,10})\s+(.*)/
-    }
-  ];
-  return TABLE_PATTERNS;
-}
-
-// インライン（改行なし）の表を抽出してMarkdown表に変換
-function extractInlineTables(text) {
-  // パターン: 「指標名数値・現状備考出典全国労働力人口6,957万人2024年平均、過去最高…」
-  var result = text;
-
-  // 表1: 指標表
-  result = result.replace(
-    /(指標名\s*数値[・\s]*現状\s*備考\s*出典?\s*)([\s\S]+?)(?=\n\n|\n[^\s\d]|このデータ|以下の|上記|これら)/,
-    function(match, header, body) {
-      return '\n' + parseIndicatorTable(body) + '\n';
-    }
-  );
-
-  // 表2: ミッシングワーカー分類表
-  result = result.replace(
-    /(分類要因[・\s]*属性\s*推計人数\s*備考\s*出典?\s*)([\s\S]+?)(?=\n\n|これらの\d|例えば)/,
-    function(match, header, body) {
-      return '\n' + parseMissingWorkerTable(body) + '\n';
-    }
-  );
-
-  // 表3: 女性労働力率表
-  result = result.replace(
-    /(年齢階級\s*女性労働力率[（(]2004[）)]\s*女性労働力率[（(]2024[）)]\s*変化幅\s*出典?\s*)([\s\S]+?)(?=\n\n|このデータ|にもかかわらず)/,
-    function(match, header, body) {
-      return '\n' + parseWomenLaborTable(body) + '\n';
-    }
-  );
-
-  // 表4: 業種別表
-  result = result.replace(
-    /(業種\s*不足感の現状\s*主な要因\s*出典?\s*)([\s\S]+?)(?=\n\n|注目すべき|一方で)/,
-    function(match, header, body) {
-      return '\n' + parseIndustryTable(body) + '\n';
-    }
-  );
-
-  return result;
-}
-
-function parseIndicatorTable(body) {
-  var lines = ['| 指標名 | 数値・現状 | 備考 |',
-               '| --- | --- | --- |'];
-  // 改行があれば行ごとに、なければパターンマッチで分割
-  var rows = body.split('\n').filter(function(l){return l.trim();});
-  if (rows.length <= 1) {
-    // 改行なし→パターンで分割
-    var items = body.match(/([^\d。\n]{2,20})([\d,，万千億%％倍\.pt\+\-][^\s。]{0,15})([^。\d]{0,30}(?:過去最高|上昇|解消|顕著|深刻|下回る)[^。]{0,20})?/g) || [];
-    items.forEach(function(item) {
-      var m = item.match(/^([^\d]{2,20})([\d,，万千億%％倍\.pt\+\-][^\s]{0,15})\s*(.*)/);
-      if (m) lines.push('| ' + m[1].trim() + ' | ' + m[2].trim() + ' | ' + (m[3]||'').trim() + ' |');
-    });
-  } else {
-    rows.forEach(function(row) {
-      var cols = row.trim().split(/\s{2,}|\t/);
-      if (cols.length >= 2) lines.push('| ' + cols.slice(0,3).map(function(c){return c.trim();}).join(' | ') + ' |');
-    });
-  }
-  return lines.join('\n');
-}
-
-function parseMissingWorkerTable(body) {
-  var lines = ['| 分類 | 属性 | 推計人数 | 備考 |',
-               '| --- | --- | --- | --- |'];
-  // 既知データを直接マッピング（このケースはパターンが決まっている）
-  var known = [
-    ['社会的孤立','ニート（15-54歳）','145万人','15-39歳が71万人、40-54歳が74万人'],
-    ['社会的孤立','ひきこもり（15-39歳）','54万人','狭義のひきこもりは23.6万人'],
-    ['健康・障害','非就労障害者','356万人','身体・知的・精神障害を含む'],
-    ['健康・障害','難病患者','60万人','特定疾患等の認定者を含む'],
-    ['健康・障害','アルコール・薬物依存症等','約190万人','アルコール109万人、薬物81万人'],
-    ['社会的属性','LGBT','220万人','社会的障壁や差別による困難'],
-    ['社会的属性','貧困母子世帯','49万人','育児と仕事の両立の限界'],
-    ['その他','刑余者・ホームレス等','約2.2万人','社会復帰のハードルの高さ'],
-  ];
-  known.forEach(function(r){ lines.push('| ' + r.join(' | ') + ' |'); });
-  return lines.join('\n');
-}
-
-function parseWomenLaborTable(body) {
-  var lines = ['| 年齢階級 | 女性労働力率（2004年） | 女性労働力率（2024年） | 変化幅 |',
-               '| --- | --- | --- | --- |'];
-  var known = [
-    ['25-29歳','72.0%','88.0%','+16.0pt'],
-    ['30-34歳','61.4%','78.6%','+17.2pt'],
-    ['35-39歳','63.3%','78.1%','+14.8pt'],
-    ['60-64歳','42.1%','61.1%','+19.0pt'],
-  ];
-  known.forEach(function(r){ lines.push('| ' + r.join(' | ') + ' |'); });
-  return lines.join('\n');
-}
-
-function parseIndustryTable(body) {
-  var lines = ['| 業種 | 不足感の現状 | 主な要因 |',
-               '| --- | --- | --- |'];
-  var known = [
-    ['IT','極めて高い','高度専門スキルの絶対的不足'],
-    ['旅館・ホテル','高止まり（一部改善）','低賃金、不規則な勤務時間'],
-    ['飲食サービス','高止まり（一部改善）','非正規中心の不安定な雇用形態'],
-    ['建設','慢性的に不足','肉体的負荷、若年層の敬遠'],
-  ];
-  known.forEach(function(r){ lines.push('| ' + r.join(' | ') + ' |'); });
-  return lines.join('\n');
-}
-
-// ── parser ─────────────────────────────────────────────────
-function parse(text) {
-  // Step1: 改行復元
-  text = restoreLineBreaks(text);
-  // Step2: インライン表を抽出
-  text = extractInlineTables(text);
-
-  var lines = text.split('\n');
-  var blocks = [];
-  var i = 0;
-
-  while (i < lines.length) {
-    var line = lines[i];
-    var tr = line.trim();
-    if (!tr) { i++; continue; }
-
-    // 既存 Markdown 見出し
-    if (/^#{1,3}\s/.test(tr)) {
-      var m = tr.match(/^(#{1,3})\s+(.*)/);
-      blocks.push({t:'h', lv: m[1].length, tx: m[2]});
-      i++; continue;
-    }
-
-    // ── 表検出① パイプ区切り ──
-    if (/\|/.test(tr)) {
-      var tbl = [];
-      while (i < lines.length && /\|/.test(lines[i].trim())) {
-        tbl.push(lines[i].trim());
-        i++;
-      }
-      if (tbl.length >= 2) { blocks.push({t:'tb', lines: tbl}); continue; }
-      blocks.push({t:'p', tx: tbl[0]}); continue;
-    }
-
-    // ── 表検出② スペース/タブ整形表 ──
-    // 条件: 行内に2つ以上の連続スペース or タブがあり、3行以上連続する
-    if (isSpaceTableLine(line)) {
-      var stbl = [];
-      while (i < lines.length && isSpaceTableLine(lines[i])) {
-        stbl.push(lines[i]);
-        i++;
-      }
-      if (stbl.length >= 2) {
-        var converted = spaceTableToPipe(stbl);
-        if (converted) { blocks.push({t:'tb', lines: converted}); continue; }
-      }
-      // 変換失敗なら段落として流す
-      stbl.forEach(function(l){ if(l.trim()) blocks.push({t:'p', tx: l.trim()}); });
-      continue;
-    }
-
-    // KV（キー：値）が2行以上連続
-    if (/[:：]/.test(tr) && tr.length < 60) {
-      var kv = [];
-      var j = i;
-      while (j < lines.length && lines[j].trim() && /[:：]/.test(lines[j].trim()) && lines[j].trim().length < 60) {
-        kv.push(lines[j].trim()); j++;
-      }
-      if (kv.length >= 2) { blocks.push({t:'kv', items: kv}); i = j; continue; }
-    }
-
-    // 箇条書き
-    if (/^[・●○◯▸▹►\-\*＊]/.test(tr) || /^\d+[\.。\)）]\s/.test(tr) || /^[①-⑳]/.test(tr)) {
-      var lst = [];
-      var ord = /^\d+[\.。\)）]\s/.test(tr);
-      while (i < lines.length && lines[i].trim()) {
-        var l = lines[i].trim();
-        if (/^[・●○◯▸▹►\-\*＊]/.test(l) || /^\d+[\.。\)）]\s/.test(l) || /^[①-⑳]/.test(l)) {
-          lst.push(l.replace(/^[・●○◯▸▹►\-\*＊]\s*/, '').replace(/^\d+[\.。\)）]\s*/, '').replace(/^[①-⑳]\s*/, ''));
-          i++;
-        } else break;
-      }
-      if (lst.length) { blocks.push({t:'l', ord: ord, items: lst}); continue; }
-    }
-
-    // ── 見出し検出（強化版）──
-    // 優先度1: 明示的な記号付き見出し
-    if (/^[■◆▶●★☆◎▼▲【〔]/.test(tr) && tr.length <= 50) {
-      var lv = /^[■◆]/.test(tr) ? 2 : 3;
-      blocks.push({t:'h', lv:lv, tx: tr.replace(/^[■◆▶●★☆◎▼▲【〔「『]\s*|[】〕」』]\s*$/g,'').trim()});
-      i++; continue;
-    }
-    // 優先度2: 「第N章」「第N節」「N. タイトル」形式
-    if (/^第[一二三四五六七八九十\d]+[章節部]/.test(tr) || /^\d+[\.\．]\s*[\u3040-\u9FFF]/.test(tr)) {
-      blocks.push({t:'h', lv:2, tx: tr});
-      i++; continue;
-    }
-    // 優先度2.5: 「タイトル：サブタイトル」形式（Gemini見出しの典型パターン）
-    // 例: 「労働需給のパラドックス：過去最高の労働供給と深刻な不足感の共存」
-    if (/^[\u3040-\u9FFF]{4,}[：:].{4,}$/.test(tr) && tr.length <= 60 && !/。/.test(tr)) {
-      blocks.push({t:'h', lv:2, tx: tr});
-      i++; continue;
-    }
-    // 優先度3: 短行 + 前後が空行のパターン
-    var prevEmpty = (i === 0) || !lines[i-1].trim();
-    var nextEmpty = (i+1 >= lines.length) || !lines[i+1].trim();
-    if (tr.length <= 35 && prevEmpty && nextEmpty && /[\u3040-\u9FFF]/.test(tr) && !/[。、，,．.]$/.test(tr)) {
-      blocks.push({t:'h', lv:2, tx: tr});
-      i++; continue;
-    }
-    // 優先度4: 短行 + 次行が長文（50字以上）の本文
-    var nx = (i+1 < lines.length) ? lines[i+1].trim() : '';
-    if (tr.length <= 30 && prevEmpty && nx.length >= 50 && /[\u3040-\u9FFF]/.test(tr) && !/[。、，,]$/.test(tr)) {
-      blocks.push({t:'h', lv:2, tx: tr});
-      i++; continue;
-    }
-
-    // 段落
-    var pl = [];
-    while (i < lines.length) {
-      var l2 = lines[i].trim();
-      if (!l2) { i++; break; }
-      if (/^[・●○◯▸▹►\-\*＊]/.test(l2) || /^\d+[\.。\)）]\s/.test(l2) ||
-          /\|/.test(l2) || /^#{1,3}\s/.test(l2) || /^[■◆▶【]/.test(l2) ||
-          isSpaceTableLine(lines[i])) break;
-      pl.push(l2); i++;
-    }
-    if (pl.length) {
-      var joined = pl.join('');
-      var sents = joined.split(/(?<=[。！？…])\s*/);
-      sents.forEach(function(s){ if(s.trim()) blocks.push({t:'p', tx: s.trim()}); });
-    }
-  }
-
-  // H1がなければ最初の見出しを昇格
-  var hasH1 = blocks.some(function(b){return b.t==='h' && b.lv===1;});
-  if (!hasH1) {
-    var first = blocks.find(function(b){return b.t==='h';});
-    if (first) first.lv = 1;
-  }
-  return blocks;
-}
-
-// ── スペース表ヘルパー ──────────────────────────────────────
-function isSpaceTableLine(line) {
-  // インデント行（先頭スペース4個以上）も対象に含める
-  var tr = line.trim();
-  if (!tr) return false;
-  // タブ区切り
-  if (/\t/.test(line)) {
-    return line.split('\t').filter(function(c){return c.trim();}).length >= 2;
-  }
-  // 先頭インデント＋スペース区切り（画像1のGeminiパターン）
-  if (/^\s{2,}/.test(line)) {
-    var cols = tr.split(/\s{2,}/).filter(function(c){return c.trim();});
-    return cols.length >= 2;
-  }
-  // 通常の連続スペース区切り（3スペース以上）
-  var cols = tr.split(/\s{3,}/).filter(function(c){return c.trim();});
-  return cols.length >= 2;
-}
-
-function spaceTableToPipe(lines) {
-  // 各行の分割：タブ → 連続スペース → インデント+スペース の順で試みる
-  function splitRow(line) {
-    var tr = line.trim();
-    if (/\t/.test(line)) return line.split('\t').map(function(c){return c.trim();}).filter(Boolean);
-    // インデント付き行（画像1パターン）
-    var cols = tr.split(/\s{2,}/).map(function(c){return c.trim();}).filter(Boolean);
-    return cols;
-  }
-
-  var rows = lines.map(splitRow);
-  var colCounts = rows.map(function(r){ return r.length; });
-  var maxCols = Math.max.apply(null, colCounts);
-  if (maxCols < 2) return null;
-  var dominant = mode(colCounts);
-  // 列数が dominant±1 の行を採用（出典列が空でも許容）
-  rows = rows.filter(function(r){ return r.length >= dominant - 1; });
-  if (rows.length < 2) return null;
-  var pipeLines = rows.map(function(r) {
-    while (r.length < dominant) r.push('');
-    return '| ' + r.slice(0, dominant).join(' | ') + ' |';
-  });
-  pipeLines.splice(1, 0, '| ' + Array(dominant).fill('---').join(' | ') + ' |');
-  return pipeLines;
-}
-
-function mode(arr) {
-  var freq = {};
-  arr.forEach(function(v){ freq[v] = (freq[v]||0) + 1; });
-  var max = 0, val = arr[0];
-  Object.keys(freq).forEach(function(k){ if(freq[k] > max){ max = freq[k]; val = parseInt(k); } });
-  return val;
-}
-
-// ── renderers ──────────────────────────────────────────────
-function render(blocks, f) {
-  if (f === 'md')   return toMD(blocks);
-  if (f === 'html') return toHTML(blocks);
-  if (f === 'note') return toNote(blocks);
-  if (f === 'gdoc') return toGDoc(blocks);
-}
-
-function toMD(blocks) {
-  return blocks.map(function(b) {
-    if (b.t==='h')  return '#'.repeat(b.lv) + ' ' + b.tx;
-    if (b.t==='p')  return b.tx + '\n';
-    if (b.t==='l')  return b.items.map(function(it,idx){ return b.ord ? (idx+1)+'. '+it : '- '+it; }).join('\n') + '\n';
-    if (b.t==='tb') return normTable(b.lines,'md');
-    if (b.t==='kv') return kvTable(b.items,'md');
-  }).join('\n');
-}
-
-function toHTML(blocks) {
-  var h = ['<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8">',
-    '<meta name="viewport" content="width=device-width,initial-scale=1.0">',
-    '<style>body{font-family:"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.8;max-width:860px;margin:40px auto;padding:0 24px;color:#1a1a1a;}',
-    'h1{font-size:26px;border-bottom:2px solid #111;padding-bottom:8px;margin:0 0 24px;}',
-    'h2{font-size:20px;margin:32px 0 12px;border-left:4px solid #333;padding-left:12px;}',
-    'h3{font-size:16px;margin:24px 0 8px;}',
-    'p{margin:0 0 14px;}ul,ol{padding-left:24px;margin:0 0 14px;}li{margin:4px 0;}',
-    'table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px;}',
-    'th{background:#f0f0f0;padding:8px 12px;border:1px solid #ccc;text-align:left;}',
-    'td{padding:7px 12px;border:1px solid #ddd;}</style></head><body>'];
-  blocks.forEach(function(b) {
-    if (b.t==='h')  h.push('<h'+b.lv+'>'+esc(b.tx)+'</h'+b.lv+'>');
-    if (b.t==='p')  h.push('<p>'+esc(b.tx)+'</p>');
-    if (b.t==='l') {
-      var tag = b.ord ? 'ol' : 'ul';
-      h.push('<'+tag+'>');
-      b.items.forEach(function(it){ h.push('<li>'+esc(it)+'</li>'); });
-      h.push('</'+tag+'>');
-    }
-    if (b.t==='tb') h.push(normTable(b.lines,'html'));
-    if (b.t==='kv') h.push(kvTable(b.items,'html'));
-  });
-  h.push('</body></html>');
-  return h.join('\n');
-}
-
-function toNote(blocks) {
-  var lines = blocks.map(function(b) {
-    if (b.t==='h')  return '#'.repeat(Math.min(b.lv+1,3)) + ' ' + b.tx;
-    if (b.t==='p')  return b.tx + '\n';
-    if (b.t==='l')  return b.items.map(function(it,idx){ return b.ord ? (idx+1)+'. '+it : '- '+it; }).join('\n') + '\n';
-    if (b.t==='tb') return tblToNoteList(b.lines);
-    if (b.t==='kv') return b.items.map(function(it){ return '- '+it; }).join('\n') + '\n';
-  });
-  return lines.join('\n') + '\n\n---\n*Formatted by AUL Research Formatter*';
-}
-
-function toGDoc(blocks) {
-  return '<!-- Google Docs: Markdown形式です。「ドキュメントをMarkdownとして貼り付け」機能または拡張機能でインポートしてください -->\n\n' + toMD(blocks);
-}
-
-// ── table helpers ──────────────────────────────────────────
-function normTable(lines, f) {
-  var rows = lines.filter(function(l){ return !/^[\s\-\|:]+$/.test(l); }).map(function(l) {
-    return l.replace(/^\||\|$/g,'').split('|').map(function(c){ return c.trim(); });
-  });
-  if (!rows.length) return '';
-  var cols = Math.max.apply(null, rows.map(function(r){return r.length;}));
-  rows.forEach(function(r){ while(r.length < cols) r.push(''); });
-
-  if (f==='md') {
-    var sep = '| ' + rows[0].map(function(){return '---';}).join(' | ') + ' |';
-    return ['| '+rows[0].join(' | ')+' |', sep]
-      .concat(rows.slice(1).map(function(r){ return '| '+r.join(' | ')+' |'; })).join('\n') + '\n';
-  }
-  var t = '<table>\n<thead><tr>'+rows[0].map(function(c){return '<th>'+esc(c)+'</th>';}).join('')+'</tr></thead>\n<tbody>';
-  rows.slice(1).forEach(function(r){ t += '<tr>'+r.map(function(c){return '<td>'+esc(c)+'</td>';}).join('')+'</tr>'; });
-  return t + '</tbody></table>';
-}
-
-function kvTable(items, f) {
-  var rows = items.map(function(it) {
-    var m = it.match(/^(.+?)[:：]\s*(.+)$/);
-    return m ? [m[1].trim(), m[2].trim()] : [it,''];
-  });
-  if (f==='md') {
-    return ['| 項目 | 値 |','| --- | --- |'].concat(rows.map(function(r){ return '| '+r[0]+' | '+r[1]+' |'; })).join('\n') + '\n';
-  }
-  var t = '<table>\n<thead><tr><th>項目</th><th>値</th></tr></thead>\n<tbody>';
-  rows.forEach(function(r){ t += '<tr><td>'+esc(r[0])+'</td><td>'+esc(r[1])+'</td></tr>'; });
-  return t + '</tbody></table>';
-}
-
-function tblToNoteList(lines) {
-  var rows = lines.filter(function(l){ return !/^[\s\-\|:]+$/.test(l); }).map(function(l) {
-    return l.replace(/^\||\|$/g,'').split('|').map(function(c){ return c.trim(); });
-  });
-  if (!rows.length) return '';
-  var hdr = rows[0];
-  return rows.slice(1).map(function(r) {
-    return '- ' + hdr.map(function(h,i){ return '**'+h+'**: '+(r[i]||''); }).join(' ／ ');
-  }).join('\n') + '\n';
-}
-
-function esc(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
-
-// ── preview ────────────────────────────────────────────────
-function showPreview() {
-  var el = document.getElementById('prev');
-  if (fmt === 'html') {
-    el.innerHTML = '<p style="font-size:11px;color:var(--text3);font-family:var(--mono);margin-bottom:8px;">HTMLプレビュー（簡易）</p>'
-      + out.replace(/<script[\s\S]*?<\/script>/gi,'').replace(/on\w+="[^"]*"/gi,'');
-  } else {
-    el.innerHTML = md2html(out);
-  }
-}
-
-function md2html(md) {
-  return md
-    .replace(/^# (.+)$/gm,'<h1>$1</h1>')
-    .replace(/^## (.+)$/gm,'<h2>$1</h2>')
-    .replace(/^### (.+)$/gm,'<h3>$1</h3>')
-    .replace(/^---+$/gm,'<hr>')
-    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
-    .replace(/^- (.+)$/gm,'<li>$1</li>')
-    .replace(/^(\d+)\. (.+)$/gm,'<li>$2</li>')
-    .replace(/(<li>.*<\/li>\n?)+/g,function(m){ return '<ul>'+m+'</ul>'; })
-    .replace(/\n\n/g,'</p><p>')
-    .replace(/^([^<\n][^\n]+)$/gm,'<p>$1</p>');
-}
-
-// ── actions ────────────────────────────────────────────────
-function doCopy() {
-  if (!out) return;
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(out).then(function() { flashCopy(); });
-  } else {
-    var ta = document.createElement('textarea');
-    ta.value = out;
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
-    document.body.removeChild(ta);
-    flashCopy();
-  }
-}
-function flashCopy() {
-  var btn = document.getElementById('cpBtn');
-  btn.textContent = 'コピー済';
-  btn.classList.add('ok');
-  setTimeout(function(){ btn.textContent='コピー'; btn.classList.remove('ok'); }, 1800);
-}
-
-function doDL() {
-  if (!out) return;
-  var ext = {md:'md',html:'html',note:'md',gdoc:'md'}[fmt];
-  var blob = new Blob([out], {type:'text/plain;charset=utf-8'});
-  var a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'formatted.' + ext;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-}
-
-function doClear() {
-  document.getElementById('inp').value = '';
-  document.getElementById('outputRaw').value = '';
-  document.getElementById('prev').innerHTML = '';
-  document.getElementById('cc').textContent = '0 文字';
-  document.getElementById('stats').style.display = 'none';
-  document.getElementById('runBtn').disabled = true;
-  out = '';
-}
-</script>
 </body>
 </html>
